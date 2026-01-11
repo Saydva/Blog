@@ -1,20 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTestDto } from './dto/test-create.dto';
 import { UpdateDto } from './dto/test-update.dto';
+import { mockPosts } from './mock-data';
 
 @Injectable()
 export class TestApiService {
   private posts: CreateTestDto[] = [];
-  private nextId = 1;
+  private nextId = Math.max(...mockPosts.map((p) => p.id)) + 1;
 
   constructor() {
-    this.posts = [
-      { id: 1, title: 'priv prispevok', content: 'Obsah tohoto prispevku' },
-    ];
+    this.posts = [...mockPosts];
   }
 
   findAll(): CreateTestDto[] {
     return this.posts;
+  }
+
+  findOne(id: number): CreateTestDto | undefined {
+    return this.posts.find((p: CreateTestDto) => p.id === id);
   }
 
   createOne(post: Omit<CreateTestDto, 'id'>): CreateTestDto {
@@ -23,7 +26,10 @@ export class TestApiService {
     return newPost;
   }
 
-  updateOne(id: number, updatePost: UpdateDto | undefined) {
+  updateOne(
+    id: number,
+    updatePost: UpdateDto | undefined,
+  ): CreateTestDto | undefined {
     const index = this.posts.findIndex((p) => p.id === id);
     if (index !== -1) {
       this.posts[index] = {
@@ -35,12 +41,9 @@ export class TestApiService {
     return undefined;
   }
 
-  findOne(id: number): CreateTestDto | undefined {
-    return this.posts.find((p: CreateTestDto) => p.id === id);
-  }
-
-  removeOne(id: number): CreateTestDto[] {
+  removeOne(id: number): CreateTestDto | undefined {
+    const findPost = this.posts.find((p) => p.id === id);
     this.posts = this.posts.filter((p: CreateTestDto) => p.id !== id);
-    return this.posts;
+    return findPost;
   }
 }

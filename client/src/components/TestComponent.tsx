@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAxios } from '../useAxios';
 
-const Menu = () => {
+const TestComponent = () => {
   const { response, fetchData } = useAxios('/test-api', 'GET');
   useEffect(() => {
     console.log(response);
@@ -9,7 +9,6 @@ const Menu = () => {
 
   return (
     <div>
-      <p>this is a menu bar</p>
       <button
         className=" mx-auto block bg-blue-200 p-1 rounded-md"
         onClick={() => {
@@ -19,9 +18,13 @@ const Menu = () => {
       >
         Click me !
       </button>
-      <p>{response ? response.key1 : 'noData click and look in the console'}</p>
+      <p>
+        {response
+          ? JSON.stringify(response)
+          : 'noData click and look in the console'}
+      </p>
     </div>
   );
 };
 
-export default Menu;
+export default TestComponent;

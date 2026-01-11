@@ -6,6 +6,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   await app.listen(process.env.PORT ?? PORT);
-  console.log(PORT);
+  console.log(`Application is running on: http://localhost:${PORT}`);
 }
-bootstrap();
+bootstrap().catch((error) => {
+  console.log('Chyba pri spúšťaní aplikácie:', error);
+  process.exit(1);
+});
