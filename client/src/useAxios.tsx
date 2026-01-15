@@ -1,6 +1,8 @@
+import { useState, useCallback } from 'react';
+
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
-import { useState } from 'react';
+import type { components } from './api/types';
 
 const api: AxiosInstance = axios.create({
   baseURL: 'http://localhost:3000',
@@ -8,16 +10,18 @@ const api: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+type TestResponse = components['schemas']['CreateTestDto'];
+
 export const useAxios = (
   url: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
   data?: any,
 ) => {
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<TestResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const result = await api.request({ url, method, data });
@@ -28,6 +32,6 @@ export const useAxios = (
     } finally {
       setLoading(false);
     }
-  };
+  }, [url, method, data]);
   return { response, loading, error, fetchData };
 };

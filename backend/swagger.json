@@ -1,0 +1,182 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["App"]
+      }
+    },
+    "/test-api": {
+      "get": {
+        "operationId": "TestApiController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Zoznam vsetkych postov",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CreateTestDto" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["test-api"]
+      },
+      "post": {
+        "operationId": "TestApiController_createOne",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateTestDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Post vytvorený",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateTestDto" }
+              }
+            }
+          }
+        },
+        "tags": ["test-api"]
+      }
+    },
+    "/test-api/{id}": {
+      "get": {
+        "operationId": "TestApiController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID postu",
+            "schema": { "example": "345", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post s id 345",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateTestDto" }
+              }
+            }
+          },
+          "404": { "description": "Post nenájdený" }
+        },
+        "tags": ["test-api"]
+      },
+      "put": {
+        "operationId": "TestApiController_updateOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID postu na aktualizáciu",
+            "schema": { "example": "1", "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post aktualizovaný",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateTestDto" }
+              }
+            }
+          },
+          "404": { "description": "Post nenájdený" }
+        },
+        "tags": ["test-api"]
+      },
+      "delete": {
+        "operationId": "TestApiController_removeOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID postu na odstránenie",
+            "schema": { "example": "1", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post odstránený",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateTestDto" }
+              }
+            }
+          },
+          "404": { "description": "Post nenájdený" }
+        },
+        "tags": ["test-api"]
+      }
+    }
+  },
+  "info": {
+    "title": "API",
+    "description": "",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateTestDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "Id postu", "example": 231 },
+          "title": {
+            "type": "string",
+            "description": "Nazov postu",
+            "example": "Moj post"
+          },
+          "content": {
+            "type": "string",
+            "description": "Obsah postu ",
+            "example": "v tomto poste sa nachadza context"
+          }
+        },
+        "required": ["id", "title", "content"]
+      },
+      "UpdateDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Názov postu",
+            "example": "Aktualizovaný názov"
+          },
+          "content": {
+            "type": "string",
+            "description": "Obsah postu",
+            "example": "Aktualizovaný obsah."
+          }
+        }
+      }
+    }
+  }
+}

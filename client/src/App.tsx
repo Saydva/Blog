@@ -1,19 +1,26 @@
 import { useEffect } from 'react';
-import Blog from './components/Blog';
 import { useAxios } from './useAxios';
+// import Blog from './components/Blog';
 import './App.css';
 
 function App() {
-  const { response, fetchData, loading } = useAxios('/test-api', 'GET');
+  const { response, fetchData, loading, error } = useAxios('test-api', 'GET');
   useEffect(() => {
     fetchData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchData]);
+
+  useEffect(() => {
+    console.log(response);
+  }, [response]);
+
   return (
     <div className="flex justify-center flex-col items-center">
-      <h1 className="mt-2 text-blue-700 ">Hello world</h1>
-      <Blog />
-      <div>{loading ? 'Loadin...' : null}</div>
-      <p>{JSON.stringify(response)}</p>
+      <h1 className="mt-2 text-blue-700 ">Blog list</h1>
+
+      {loading && <p>Nacitavam...</p>}
+      {error && <p>Chyba: {error}</p>}
+      {response && <p>{JSON.stringify(response)}</p>}
+      {/* <Blog /> */}
     </div>
   );
 }
