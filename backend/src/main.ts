@@ -19,7 +19,7 @@ async function bootstrap() {
   console.log(
     `Application is running on:`,
     process.env.PORT,
-    process.env.MONGO_URI,
+    'mongodb://127.0.0.1:27017/',
   );
 }
 bootstrap().catch((error) => {

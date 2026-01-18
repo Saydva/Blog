@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, type ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 @Schema()
 export class Post extends Document {
@@ -9,7 +10,7 @@ export class Post extends Document {
   slug: string;
   @Prop({ required: true })
   content: string;
-  @Prop({ required: true })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   author: ObjectId;
   @Prop({ required: true, enum: ['draft', 'published'], default: 'draft' })
   status: string;
