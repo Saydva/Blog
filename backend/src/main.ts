@@ -16,7 +16,11 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT ?? PORT);
-  console.log(`Application is running on: http://localhost:${PORT}`);
+  console.log(
+    `Application is running on:`,
+    process.env.PORT,
+    process.env.MONGO_URI,
+  );
 }
 bootstrap().catch((error) => {
   console.log('Chyba pri spúšťaní aplikácie:', error);
