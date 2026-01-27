@@ -10,7 +10,7 @@ const api: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-type TestResponse = components['schemas']['CreateTestDto'];
+type TestResponse = components['schemas']['CreatePostDto'];
 
 export const useAxios = (
   url: string,
@@ -18,7 +18,7 @@ export const useAxios = (
   data?: any,
 ) => {
   const [response, setResponse] = useState<TestResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {

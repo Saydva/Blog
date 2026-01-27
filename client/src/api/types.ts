@@ -20,33 +20,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/test-api": {
+    "/posts": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["TestApiController_findAll"];
+        get?: never;
         put?: never;
-        post: operations["TestApiController_createOne"];
+        post: operations["PostController_create"];
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/test-api/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TestApiController_findOne"];
-        put: operations["TestApiController_updateOne"];
-        post?: never;
-        delete: operations["TestApiController_removeOne"];
         options?: never;
         head?: never;
         patch?: never;
@@ -56,34 +40,32 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        CreateTestDto: {
+        CreatePostDto: {
             /**
-             * @description Id postu
-             * @example 231
-             */
-            id: number;
-            /**
-             * @description Nazov postu
-             * @example Moj post
+             * @description Názov článku
+             * @example Môj prvý článok
              */
             title: string;
             /**
-             * @description Obsah postu
-             * @example v tomto poste sa nachadza context
+             * @description Obsah článku
+             * @example Toto je obsah...
              */
             content: string;
-        };
-        UpdateDto: {
             /**
-             * @description Názov postu
-             * @example Aktualizovaný názov
+             * @description Slug Clanku
+             * @example Moj prvy clanok
              */
-            title?: string;
+            slug: string;
             /**
-             * @description Obsah postu
-             * @example Aktualizovaný obsah.
+             * @description Author
+             * @example id:3452
              */
-            content?: string;
+            author: Record<string, never>;
+            /**
+             * @description Published
+             * @example publikovany pre ostatnych pouzivatelov na citanie
+             */
+            status: string;
         };
     };
     responses: never;
@@ -111,27 +93,7 @@ export interface operations {
             };
         };
     };
-    TestApiController_findAll: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Zoznam vsetkych postov */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateTestDto"][];
-                };
-            };
-        };
-    };
-    TestApiController_createOne: {
+    PostController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -140,108 +102,11 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateTestDto"];
+                "application/json": components["schemas"]["CreatePostDto"];
             };
         };
         responses: {
-            /** @description Post vytvorený */
             201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateTestDto"];
-                };
-            };
-        };
-    };
-    TestApiController_findOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID postu */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Post s id 345 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateTestDto"];
-                };
-            };
-            /** @description Post nenájdený */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TestApiController_updateOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID postu na aktualizáciu */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateDto"];
-            };
-        };
-        responses: {
-            /** @description Post aktualizovaný */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateTestDto"];
-                };
-            };
-            /** @description Post nenájdený */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TestApiController_removeOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID postu na odstránenie */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Post odstránený */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateTestDto"];
-                };
-            };
-            /** @description Post nenájdený */
-            404: {
                 headers: {
                     [name: string]: unknown;
                 };

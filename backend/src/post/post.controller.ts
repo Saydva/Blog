@@ -4,13 +4,16 @@ import {
   Controller,
   NotFoundException,
   Post,
+  Get,
   UsePipes,
   ValidationPipe,
+  ConflictException,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/createPostDto';
+import { MongoError } from 'mongodb';
 
-@Controller('post')
+@Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
@@ -30,10 +33,20 @@ export class PostController {
       }
       return post;
     } catch (error) {
-      if (error) {
-        throw new BadRequestException(error);
+      if (error instanceof MongoError && error.code === 11000) {
+        // MongoDB duplicate key error
+        throw new ConflictException('Post s týmto title už existuje');
       }
-      throw error;
+
+      throw new BadRequestException(
+        (error instanceof MongoError && error.message) ||
+          'Chyba pri vytváraní postu',
+      );
     }
+  }
+
+  @Get()
+  async findAll() {
+    return await this.postService.findAll();
   }
 }

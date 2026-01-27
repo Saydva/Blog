@@ -12,7 +12,17 @@ export class PostService {
   ) {}
 
   async create(createPostDto: CreatePostDto) {
+    const existingPost = await this.postModel
+      .findOne({ title: createPostDto.title })
+      .exec();
+    if (existingPost) {
+      throw new Error('Post s týmto title už existuje');
+    }
     const createPost = new this.postModel(createPostDto);
     return createPost.save();
+  }
+
+  async findAll() {
+    return await this.postModel.find().exec();
   }
 }

@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 
 @Schema()
 export class Post extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   title: string;
   @Prop({ required: true })
   slug: string;
