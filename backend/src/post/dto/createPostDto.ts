@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString, IsMongoId } from 'class-validator';
+import { IsNotEmpty, IsString, IsMongoId, IsIn } from 'class-validator';
 import { type ObjectId } from 'mongoose';
 
 export class CreatePostDto {
@@ -23,7 +23,7 @@ export class CreatePostDto {
     description: 'Published',
     example: 'publikovany pre ostatnych pouzivatelov na citanie',
   })
-  @IsEnum(['draft', 'published'])
+  @IsIn(['draft', 'published'])
   @IsNotEmpty()
-  status: string;
+  status: 'draft' | 'published';
 }

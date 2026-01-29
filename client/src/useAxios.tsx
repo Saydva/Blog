@@ -5,33 +5,60 @@ import type { AxiosInstance } from 'axios';
 import type { components } from './api/types';
 
 const api: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:5000',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
 
 type TestResponse = components['schemas']['CreatePostDto'];
+type responseType = TestResponse[] | null;
 
-export const useAxios = (
-  url: string,
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
-  data?: any,
-) => {
-  const [response, setResponse] = useState<TestResponse | null>(null);
+export const useAxiosPost = (data?: TestResponse) => {
+  const url = '/posts';
+  const [response, setResponse] = useState<responseType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
+  const getAllPosts = useCallback(async () => {
+    const method = 'GET';
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
       const result = await api.request({ url, method, data });
+
       setResponse(result.data);
-    } catch (error: any) {
-      setError(error.message || 'Chyba pri poziadavke');
-      setLoading(false);
+      return result.data;
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message || err.message || 'Unknown error';
+      setError(message);
+      console.error('API Error:', message);
+      return null;
     } finally {
       setLoading(false);
     }
-  }, [url, method, data]);
-  return { response, loading, error, fetchData };
+  }, []);
+
+  const getOnePost = useCallback(async (id: string) => {
+    const method = 'GET';
+    const getUrl = `${url}/${id}`;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await api.request({ url: getUrl, method, data });
+      setResponse(result.data);
+      return result.data;
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message || err.message || 'Unknown error';
+      setError(message);
+      console.error('API Error:', message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { response, loading, error, getAllPosts, getOnePost };
 };

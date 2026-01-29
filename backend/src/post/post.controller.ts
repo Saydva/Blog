@@ -1,17 +1,20 @@
 import {
-  BadRequestException,
   Body,
   Controller,
-  NotFoundException,
   Post,
   Get,
   UsePipes,
   ValidationPipe,
   ConflictException,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/createPostDto';
-import { MongoError } from 'mongodb';
+
+interface DataBaseError extends Error {
+  code?: string | number;
+}
 
 @Controller('posts')
 export class PostController {
@@ -28,25 +31,30 @@ export class PostController {
   async create(@Body() createPostDto: CreatePostDto) {
     try {
       const post = await this.postService.create(createPostDto);
-      if (!post) {
-        throw new NotFoundException('Post not created');
-      }
       return post;
     } catch (error) {
-      if (error instanceof MongoError && error.code === 11000) {
-        // MongoDB duplicate key error
+      if ((error as DataBaseError).code === 11000) {
         throw new ConflictException('Post s týmto title už existuje');
       }
-
-      throw new BadRequestException(
-        (error instanceof MongoError && error.message) ||
-          'Chyba pri vytváraní postu',
-      );
     }
   }
 
   @Get()
   async findAll() {
     return await this.postService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.postService.findOne(id);
+  }
+
+  @Get('title/:title')
+  async findOneByTitle(@Param('title') title: string) {
+    const post = await this.postService.findByTitle(title);
+    if (!post) {
+      throw new NotFoundException('Post s týmto title nebol nájdený');
+    }
+    return post;
   }
 }

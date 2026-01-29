@@ -1,0 +1,7 @@
+###
+GET http://localhost:5000/posts/697852661c0a4da9f8b25a79
+Content-Type: application/json
+
+###
+GET http://localhost:5000/posts/title/New Post
+Content-Type: application/json

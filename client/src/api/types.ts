@@ -27,7 +27,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["PostController_findAll"];
         put?: never;
         post: operations["PostController_create"];
         delete?: never;
@@ -77,6 +77,23 @@ export interface components {
 export type $defs = Record<string, never>;
 export interface operations {
     AppController_getHello: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PostController_findAll: {
         parameters: {
             query?: never;
             header?: never;
